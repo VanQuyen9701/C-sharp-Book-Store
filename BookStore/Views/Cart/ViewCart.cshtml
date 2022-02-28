@@ -1,0 +1,68 @@
+﻿@model IEnumerable<CartItems>
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Context.Session.GetString("MESSAGECART")</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.bookID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BookName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.bookID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BookName)
+                    </td>
+                    <td>
+                        <form asp-action="UpdateCart" asp-controller="Cart" method="get">
+                            <input type="number" name="quantity" value="@item.quantity" />
+                            <input type="hidden" name="bookid" value="@item.bookID" />
+                            <button>Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryId)
+                    </td>
+                    <td>
+                        <a asp-action="RemoveCart" asp-controller="Cart" asp-route-id="@item.bookID">Remove</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+<a asp-controller="Shopping" asp-action="Shopping">Add more product</a>
+<hr />
+<a asp-controller="Cart" asp-action="ThanhToan">Thanh toan</a>
+
